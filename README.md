@@ -13,8 +13,8 @@ A template project for quickly getting started with the Scrapybara SDK and Act S
 1. Clone this repository:
 
 ```bash
-git clone <your-repo-url>
-cd <repo-name>
+git clone https://github.com/Scrapybara/scrapybara-python-template.git
+cd scrapybara-python-template
 ```
 
 2. Install dependencies using Poetry:
