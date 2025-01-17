@@ -23,10 +23,17 @@ cd scrapybara-python-template
 poetry install
 ```
 
-3. Create a `.env` file in the project root and add your Scrapybara API key:
+3. Copy the example environment file and add your API keys:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` with your API keys:
 
 ```bash
 SCRAPYBARA_API_KEY=your_api_key_here
+ANTHROPIC_API_KEY=your_api_key_here  # Optional
 ```
 
 ## Project Structure
