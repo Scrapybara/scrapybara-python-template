@@ -4,10 +4,10 @@ CORE SDK USAGE:
 
 - Initialize client: from scrapybara import Scrapybara; client = Scrapybara(api_key="KEY")
 - Instance lifecycle:
-  instance = client.start(instance_type="small", timeout_hours=1)
-  instance.pause() # Pause to save resources
-  instance.resume(timeout_hours=1) # Resume work
-  instance.stop() # Terminate and clean up
+instance = client.start(instance_type="small", timeout_hours=1)
+instance.pause() # Pause to save resources
+instance.resume(timeout_hours=1) # Resume work
+instance.stop() # Terminate and clean up
 
 CORE INSTANCE OPERATIONS:
 
@@ -23,68 +23,67 @@ ACT SDK (Primary Focus):
 - Core components:
 
 1. Model: Handles LLM integration (currently Anthropic)
-   from scrapybara.anthropic import Anthropic
-   model = Anthropic() # Or model = Anthropic(api_key="KEY") for own key
+    from scrapybara.anthropic import Anthropic
+    model = Anthropic() # Or model = Anthropic(api_key="KEY") for own key
 
 2. Tools: Interface for computer interactions
 
-   - BashTool: Run shell commands
-   - ComputerTool: Mouse/keyboard control
-   - EditTool: File operations
-   - BrowserTool: Web automation via Playwright
+    - BashTool: Run shell commands
+    - ComputerTool: Mouse/keyboard control
+    - EditTool: File operations
+    - BrowserTool: Web automation via Playwright
 
 3. Basic tool setup:
-   tools = [
-   BashTool(instance),
-   ComputerTool(instance),
-   EditTool(instance),
-   BrowserTool(instance)
-   ]
+    tools = [
+        BashTool(instance),
+        ComputerTool(instance),
+        EditTool(instance),
+        BrowserTool(instance)
+    ]
 
 MESSAGE HANDLING:
 
 - Response Structure: Messages are structured with roles (user/assistant/tool) and typed content
 - Content Types:
 - TextPart: Simple text content
-  TextPart(type="text", text="content")
+    TextPart(type="text", text="content")
 - ImagePart: Base64 or URL images
-  ImagePart(type="image", image="base64...", mime_type="image/png")
+    ImagePart(type="image", image="base64...", mime_type="image/png")
 - ToolCallPart: Tool invocations
-  ToolCallPart(
-  type="tool-call",
-  tool_call_id="id",
-  tool_name="bash",
-  args={"command": "ls"}
-  )
+    ToolCallPart(
+        type="tool-call",
+        tool_call_id="id",
+        tool_name="bash",
+        args={"command": "ls"}
+    )
 - ToolResultPart: Tool execution results
-  ToolResultPart(
-  type="tool-result",
-  tool_call_id="id",
-  tool_name="bash",
-  result="output",
-  is_error=False
-  )
+    ToolResultPart(
+        type="tool-result",
+        tool_call_id="id",
+        tool_name="bash",
+        result="output",
+        is_error=False
+    )
 
 STEP HANDLING:
 
 # Access step information in callbacks
-
 def handle_step(step: Step):
-print(f"Text: {step.text}")
-if step.tool_calls:
-for call in step.tool_calls:
-print(f"Tool: {call.tool_name}")
-if step.tool_results:
-for result in step.tool_results:
-print(f"Result: {result.result}")
-print(f"Tokens: {step.usage.total_tokens if step.usage else 'N/A'}")
+    print(f"Text: {step.text}")
+    if step.tool_calls:
+        for call in step.tool_calls:
+            print(f"Tool: {call.tool_name}")
+    if step.tool_results:
+        for result in step.tool_results:
+            print(f"Result: {result.result}")
+    print(f"Tokens: {step.usage.total_tokens if step.usage else 'N/A'}")
 
 response = client.act(
-model=Anthropic(),
-tools=tools,
-system="System context",
-prompt="Task",
-on_step=handle_step
+    model=Anthropic(),
+    tools=tools,
+    system="System context",
+    prompt="Task",
+    on_step=handle_step
 )
 messages = response.messages
 steps = response.steps
@@ -110,16 +109,16 @@ instance = client.start()
 instance.browser.start()
 
 response = client.act(
-model=Anthropic(),
-tools=[
-BashTool(instance),
-ComputerTool(instance),
-EditTool(instance),
-BrowserTool(instance),
-],
-system=SYSTEM_PROMPT,
-prompt="Go to the YC website and fetch the HTML",
-on_step=lambda step: print(f"{step}\n"),
+    model=Anthropic(),
+    tools=[
+        BashTool(instance),
+        ComputerTool(instance),
+        EditTool(instance),
+        BrowserTool(instance),
+    ],
+    system=SYSTEM_PROMPT,
+    prompt="Go to the YC website and fetch the HTML",
+    on_step=lambda step: print(f"{step}\n"),
 )
 messages = response.messages
 steps = response.steps
@@ -137,22 +136,23 @@ EXECUTION PATTERNS:
 1. Basic agent execution:
 
 response = client.act(
-model=Anthropic(),
-tools=tools,
-system="System context here",
-prompt="Task description"
+    model=Anthropic(),
+    tools=tools,
+    system="System context here",
+    prompt="Task description"
 )
 
 2. Browser automation:
 
 cdp_url = instance.browser.start().cdp_url
-auth_state_id = instance.browser.save_auth(name="default").auth_state_id # Save auth
-instance.browser.authenticate(auth_state_id=auth_state_id) # Reuse auth
+auth_state_id = instance.browser.save_auth(name="default").auth_state_id  # Save auth
+instance.browser.authenticate(auth_state_id=auth_state_id)  # Reuse auth
 
 3. File management:
 
 instance.file.write("/tmp/data.txt", "content")
 content = instance.file.read("/tmp/data.txt").content
+
 
 IMPORTANT GUIDELINES:
 
@@ -168,15 +168,15 @@ ERROR HANDLING:
 
 from scrapybara.core.api_error import ApiError
 try:
-client.start()
+    client.start()
 except ApiError as e:
-print(f"Error {e.status_code}: {e.body}")
+    print(f"Error {e.status_code}: {e.body}")
 
 BROWSER TOOL OPERATIONS:
 
 - Required setup:
-  cdp_url = instance.browser.start().cdp_url
-  tools = [BrowserTool(instance)]
+cdp_url = instance.browser.start().cdp_url
+tools = [BrowserTool(instance)]
 - Commands: go_to, get_html, evaluate, click, type, screenshot, get_text, get_attribute
 - Always handle browser authentication states appropriately
 
