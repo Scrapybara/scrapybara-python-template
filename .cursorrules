@@ -1,13 +1,13 @@
-You are working with Scrapybara, a Python SDK for deploying and managing remote desktop instances for AI agents. Use this guide to properly interact with the SDK.
+ You are working with Scrapybara, a Python SDK for deploying and managing remote desktop instances for AI agents. Use this guide to properly interact with the SDK.
 
 CORE SDK USAGE:
 
 - Initialize client: from scrapybara import Scrapybara; client = Scrapybara(api_key="KEY")
 - Instance lifecycle:
-instance = client.start(instance_type="small", timeout_hours=1)
-instance.pause() # Pause to save resources
-instance.resume(timeout_hours=1) # Resume work
-instance.stop() # Terminate and clean up
+    instance = client.start(instance_type="small", timeout_hours=1)
+    instance.pause() # Pause to save resources
+    instance.resume(timeout_hours=1) # Resume work
+    instance.stop() # Terminate and clean up
 
 CORE INSTANCE OPERATIONS:
 
@@ -27,19 +27,35 @@ ACT SDK (Primary Focus):
     model = Anthropic() # Or model = Anthropic(api_key="KEY") for own key
 
 2. Tools: Interface for computer interactions
-
     - BashTool: Run shell commands
     - ComputerTool: Mouse/keyboard control
     - EditTool: File operations
     - BrowserTool: Web automation via Playwright
-
-3. Basic tool setup:
     tools = [
         BashTool(instance),
         ComputerTool(instance),
         EditTool(instance),
         BrowserTool(instance)
     ]
+
+3. Prompt:
+    - system: system prompt, recommend to use SYSTEM_PROMPT
+    - prompt: simple user prompt
+    - messages: list of messages
+    - Only include either prompt or messages, not both
+
+response = client.act(
+    model=Anthropic(),
+    tools=tools,
+    system=SYSTEM_PROMPT,
+    prompt="Task",
+    on_step=handle_step
+)
+messages = response.messages
+steps = response.steps
+text = response.text
+output = response.output
+usage = response.usage
 
 MESSAGE HANDLING:
 
@@ -78,18 +94,24 @@ def handle_step(step: Step):
             print(f"Result: {result.result}")
     print(f"Tokens: {step.usage.total_tokens if step.usage else 'N/A'}")
 
+STRUCTURED OUTPUT:
+Use the schema parameter to define a desired structured output. The response's output field will contain the validated typed data returned by the model.
+
+class HNSchema(BaseModel):
+    class Post(BaseModel):
+        title: str
+        url: str 
+        points: int
+    posts: List[Post]
+
 response = client.act(
     model=Anthropic(),
     tools=tools,
-    system="System context",
-    prompt="Task",
-    on_step=handle_step
+    schema=HNSchema,
+    system=SYSTEM_PROMPT,
+    prompt="Get the top 10 posts on Hacker News",
 )
-messages = response.messages
-steps = response.steps
-text = response.text
-output = response.output
-usage = response.usage
+posts = response.output.posts
 
 TOKEN USAGE:
 
@@ -128,8 +150,6 @@ usage = response.usage
 
 instance.browser.stop()
 instance.stop()
-Always prefer to use the provided SYSTEM_PROMPT wherever possible.
-For act, remember that you can pass it either a prompt or messages but not both.
 
 EXECUTION PATTERNS:
 
