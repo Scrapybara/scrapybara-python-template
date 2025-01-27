@@ -504,13 +504,13 @@ cli = ["click (>=5.0)"]
 
 [[package]]
 name = "scrapybara"
-version = "2.1.2"
+version = "2.2.0"
 description = ""
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "scrapybara-2.1.2-py3-none-any.whl", hash = "sha256:e68d920fa9cb3505a948211eee6f003c2a700d15bebd749e44f0e3f9b5236d62"},
-    {file = "scrapybara-2.1.2.tar.gz", hash = "sha256:252aaa47193afd492b1a035eb541dec7400c6b981d74e717a2c9883a342ff65b"},
+    {file = "scrapybara-2.2.0-py3-none-any.whl", hash = "sha256:d96ed6ec952d483e43e44041d790662af9a72590d9c19c373d1a7a691ebcd94b"},
+    {file = "scrapybara-2.2.0.tar.gz", hash = "sha256:90ec7a9592985bf73c0a13537f2de1d5e8c530422ca6550e73cd3dcffc042008"},
 ]
 
 [package.dependencies]
@@ -546,4 +546,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "4a477727bbb50cf4d5150ab439c6c14b228e3d3d76a08783458f78147ce8a703"
+content-hash = "da4156a93fb541f2724667d0b9f50a128b7d0eaded1564fe760fa22c60f8918e"

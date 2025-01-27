@@ -1,7 +1,7 @@
 from scrapybara import Scrapybara
 from scrapybara.anthropic import Anthropic
-from scrapybara.tools import ComputerTool, BashTool, EditTool, BrowserTool
-from scrapybara.prompts import SYSTEM_PROMPT
+from scrapybara.tools import ComputerTool, BashTool, EditTool
+from scrapybara.prompts import UBUNTU_SYSTEM_PROMPT
 from pydantic import BaseModel
 from typing import List
 from dotenv import load_dotenv
@@ -14,8 +14,7 @@ load_dotenv()
 def main():
     # Initialize client
     client = Scrapybara(api_key=os.getenv("SCRAPYBARA_API_KEY"))
-    instance = client.start()
-    instance.browser.start()
+    instance = client.start_ubuntu(timeout_hours=0.5)
 
     try:
         # Define schema
@@ -34,9 +33,8 @@ def main():
                 BashTool(instance),
                 ComputerTool(instance),
                 EditTool(instance),
-                BrowserTool(instance),
             ],
-            system=SYSTEM_PROMPT,
+            system=UBUNTU_SYSTEM_PROMPT,
             prompt="Get the top 10 posts on Hacker News",
             schema=HNSchema,
             on_step=lambda step: print(step.text),
@@ -48,7 +46,6 @@ def main():
 
     finally:
         # Cleanup
-        instance.browser.stop()
         instance.stop()
 
 

@@ -1,13 +1,17 @@
- You are working with Scrapybara, a Python SDK for deploying and managing remote desktop instances for AI agents. Use this guide to properly interact with the SDK.
+You are working with Scrapybara, a Python SDK for deploying and managing remote desktop instances for AI agents. Use this guide to properly interact with the SDK.
 
 CORE SDK USAGE:
 
 - Initialize client: from scrapybara import Scrapybara; client = Scrapybara(api_key="KEY")
 - Instance lifecycle:
-    instance = client.start(instance_type="small", timeout_hours=1)
+    instance = client.start_ubuntu(timeout_hours=1)
     instance.pause() # Pause to save resources
     instance.resume(timeout_hours=1) # Resume work
     instance.stop() # Terminate and clean up
+- Instance types:
+    ubuntu_instance = client.start_ubuntu(): supports bash, computer, edit, browser
+    browser_instance = client.start_browser(): supports computer, browser
+    windows_instance = client.start_windows(): supports computer
 
 CORE INSTANCE OPERATIONS:
 
@@ -30,16 +34,14 @@ ACT SDK (Primary Focus):
     - BashTool: Run shell commands
     - ComputerTool: Mouse/keyboard control
     - EditTool: File operations
-    - BrowserTool: Web automation via Playwright
     tools = [
         BashTool(instance),
         ComputerTool(instance),
         EditTool(instance),
-        BrowserTool(instance)
     ]
 
 3. Prompt:
-    - system: system prompt, recommend to use SYSTEM_PROMPT
+    - system: system prompt, recommend to use UBUNTU_SYSTEM_PROMPT, BROWSER_SYSTEM_PROMPT, WINDOWS_SYSTEM_PROMPT
     - prompt: simple user prompt
     - messages: list of messages
     - Only include either prompt or messages, not both
@@ -47,7 +49,7 @@ ACT SDK (Primary Focus):
 response = client.act(
     model=Anthropic(),
     tools=tools,
-    system=SYSTEM_PROMPT,
+    system=UBUNTU_SYSTEM_PROMPT,
     prompt="Task",
     on_step=handle_step
 )
@@ -123,11 +125,11 @@ Here's a brief example of how to use the Scrapybara SDK:
 
 from scrapybara import Scrapybara
 from scrapybara.anthropic import Anthropic
-from scrapybara.prompts import SYSTEM_PROMPT
-from scrapybara.tools import BashTool, ComputerTool, EditTool, BrowserTool
+from scrapybara.prompts import UBUNTU_SYSTEM_PROMPT
+from scrapybara.tools import BashTool, ComputerTool, EditTool
 
 client = Scrapybara()
-instance = client.start()
+instance = client.start_ubuntu()
 instance.browser.start()
 
 response = client.act(
@@ -136,9 +138,8 @@ response = client.act(
         BashTool(instance),
         ComputerTool(instance),
         EditTool(instance),
-        BrowserTool(instance),
     ],
-    system=SYSTEM_PROMPT,
+    system=UBUNTU_SYSTEM_PROMPT,
     prompt="Go to the YC website and fetch the HTML",
     on_step=lambda step: print(f"{step}\n"),
 )
@@ -188,7 +189,7 @@ ERROR HANDLING:
 
 from scrapybara.core.api_error import ApiError
 try:
-    client.start()
+    client.start_ubuntu()
 except ApiError as e:
     print(f"Error {e.status_code}: {e.body}")
 
