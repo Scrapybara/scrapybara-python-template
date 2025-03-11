@@ -1,5 +1,5 @@
 from scrapybara import Scrapybara
-from scrapybara.anthropic import Anthropic, UBUNTU_SYSTEM_PROMPT
+from scrapybara.openai import OpenAI, UBUNTU_SYSTEM_PROMPT
 from scrapybara.tools import ComputerTool, BashTool, EditTool
 from pydantic import BaseModel
 from typing import List
@@ -29,7 +29,7 @@ def main():
 
         # Execute action
         response = client.act(
-            model=Anthropic(),
+            model=OpenAI(),
             tools=[
                 BashTool(instance),
                 ComputerTool(instance),
