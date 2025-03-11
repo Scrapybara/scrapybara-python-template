@@ -46,6 +46,7 @@ Then edit `.env` with your API keys:
 ```bash
 SCRAPYBARA_API_KEY=your_api_key_here
 ANTHROPIC_API_KEY=your_api_key_here  # Optional
+OPENAI_API_KEY=your_api_key_here  # Optional
 ```
 
 ## Project Structure
@@ -114,6 +115,8 @@ Modify the model initialization to use your own API key:
 
 ```python
 model=Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+# or
+model=OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 ```
 
 ## Cursor Rules
