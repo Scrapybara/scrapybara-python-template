@@ -1,11 +1,23 @@
-# Scrapybara Python Template
+<div id="toc" align="center">
+  <ul style="list-style: none">
+    <summary>
+      <h1>Scrapybara Python Template</h1>
+    </summary>
+  </ul>
+</div>
 
-A template project for quickly getting started with the Scrapybara SDK and Act SDK for AI-powered desktop and browser automation.
+<p align="center">
+  <a href="https://github.com/scrapybara/scrapybara-playground/blob/main/license"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue" /></a>
+  <a href="https://discord.gg/s4bPUVFXqA"><img alt="Discord" src="https://img.shields.io/badge/Discord-Join%20the%20community-6D1CCF.svg?logo=discord" /></a>
+  <a href="https://x.com/scrapybara"><img alt="X" src="https://img.shields.io/badge/Twitter-Follow%20us-6D1CCF.svg?logo=X" /></a>
+</p>
+
+A template project for quickly getting started with the Scrapybara SDK and Act SDK for agentic desktop and browser automation.
 
 ## Prerequisites
 
 - Python 3.8 or higher
-- Poetry (Python package manager: https://python-poetry.org/docs/)
+- uv (Python package manager: https://docs.astral.sh/uv/getting-started/installation/)
 - A Scrapybara API key (https://scrapybara.com/dashboard)
 
 ## Setup
@@ -17,10 +29,10 @@ git clone https://github.com/Scrapybara/scrapybara-python-template.git
 cd scrapybara-python-template
 ```
 
-2. Install dependencies using Poetry:
+2. Install dependencies using uv:
 
 ```bash
-poetry install
+uv sync
 ```
 
 3. Copy the example environment file and add your API keys:
@@ -40,11 +52,12 @@ ANTHROPIC_API_KEY=your_api_key_here  # Optional
 
 ```
 .
-├── .env                 # Environment variables
-├── pyproject.toml      # Poetry dependencies and project config
-├── main.py            # Main script with Scrapybara setup
-├── .cursorrules        # Cursor rules for working with the Scrapybara SDK
-└── README.md          # This file
+├── .cursorrules      # Cursor rules for working with the Scrapybara SDK
+├── .env              # Environment variables
+├── pyproject.toml    # uv dependencies
+├── README.md         # This file
+└── src/
+    └── main.py       # Main script
 ```
 
 ## Usage
@@ -52,7 +65,7 @@ ANTHROPIC_API_KEY=your_api_key_here  # Optional
 Run the template script:
 
 ```bash
-poetry run python main.py
+uv run src/main.py
 ```
 
 The script will:
@@ -83,7 +96,6 @@ tools=[
     ComputerTool(instance),
     BashTool(instance),
     EditTool(instance),
-    BrowserTool(instance),
     YourNewTool(instance)
 ]
 ```
@@ -96,17 +108,6 @@ The template includes basic error handling with automatic cleanup:
 - Ensures instance cleanup via `finally` block
 - Stops the browser and instance properly
 
-## Advanced Usage
-
-### Environment Variables
-
-Add additional environment variables to `.env` as needed:
-
-```bash
-SCRAPYBARA_API_KEY=your_key
-ANTHROPIC_API_KEY=your_key  # If using your own Anthropic key
-```
-
 ### Custom Model Configuration
 
 Modify the model initialization to use your own API key:
@@ -118,16 +119,6 @@ model=Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 ## Cursor Rules
 
 We've included a `.cursorrules` file that contains instructions for working with the Scrapybara SDK.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request
-
-## License
-
-MIT
 
 ## Support
 

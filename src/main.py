@@ -1,7 +1,6 @@
 from scrapybara import Scrapybara
-from scrapybara.anthropic import Anthropic
+from scrapybara.anthropic import Anthropic, UBUNTU_SYSTEM_PROMPT
 from scrapybara.tools import ComputerTool, BashTool, EditTool
-from scrapybara.prompts import UBUNTU_SYSTEM_PROMPT
 from pydantic import BaseModel
 from typing import List
 from dotenv import load_dotenv
@@ -14,6 +13,8 @@ load_dotenv()
 def main():
     # Initialize client
     client = Scrapybara(api_key=os.getenv("SCRAPYBARA_API_KEY"))
+
+    # Start new instance
     instance = client.start_ubuntu(timeout_hours=0.5)
 
     try:
