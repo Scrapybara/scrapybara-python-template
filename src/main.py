@@ -36,7 +36,7 @@ def main():
                 EditTool(instance),
             ],
             system=UBUNTU_SYSTEM_PROMPT,
-            prompt="Get the top 10 posts on Hacker News",
+            prompt="Get the top 5 posts on Hacker News",
             schema=HNSchema,
             on_step=lambda step: print(step.text),
         )
